@@ -86,8 +86,8 @@ bool CPEDirExport::LoadDir(IPEManager *pmngr, DWORD dir_offset)
 					break;
 				}
 			} while (true);
-
-			if (!AddProc(pname, pords[i], pfuncs[i], &id, pords[i])) {
+			//fixed pfuncs index
+			if (!AddProc(pname, pords[i], pfuncs[pords[i]], &id, pords[i])) {
 				buf.FreeDataBlock(pname);
 				continue;//error missing
 			}
