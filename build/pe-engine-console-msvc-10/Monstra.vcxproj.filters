@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Monstra">
+      <UniqueIdentifier>{ba0da5ad-7c59-4763-89e4-4f0604265a7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Monstra\PE">
+      <UniqueIdentifier>{8061f497-6795-40b1-bf2d-5ec1bd2d1daa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\ErrorHandler.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\IOPointer.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEHeader.cpp">
+      <Filter>Monstra\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEMap.cpp">
+      <Filter>Monstra\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEInfoParser.cpp">
+      <Filter>Monstra\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\BaseDefs.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ErrorHandler.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IOPointer.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEDefs.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEParser.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEHeader.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEInfoParser.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEMap.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
