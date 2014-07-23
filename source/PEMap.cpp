@@ -61,7 +61,7 @@ bool PEMap::Load(PEHeaderParser &parser, uint32_t virt_align, uint32_t raw_align
 		push_back(entry);
 	}
 
-	Realign(0, 0);
+	Realign(_virt_align, _raw_align);
 
 	return true;
 }
@@ -75,17 +75,14 @@ void PEMap::Clear()
 
 void PEMap::Realign(uint32_t virt_align, uint32_t raw_align)
 {//TOFIX некорректное выравнивание данных например 0x1000 -> 0x2000
-	if (virt_align == 0) {
-		virt_align = _virt_align;
-	}
-	if (raw_align == 0) {
-		raw_align = _raw_align;
-	}
-
 	vector<PEBlockEntry>& map = *this;
 	for (int i = 0, count = size(); i < count; i++) {
-		Align(map[i].rva, map[i].rva_size, virt_align, _virt_align < virt_align);
-		Align(map[i].raw, map[i].raw_size, raw_align, _raw_align < raw_align);
+		Align(map[i].rva, map[i].rva_size, virt_align, _virt_align < virt_align && _virt_align != 0);
+		Align(map[i].raw, map[i].raw_size, raw_align, _raw_align < raw_align && _raw_align != 0);
+
+		if (map[i].rva_size < map[i].raw_size) {
+			map[i].raw_size = map[i].rva_size;
+		}
 	}
 
 	_virt_align = virt_align;

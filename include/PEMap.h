@@ -15,42 +15,6 @@ enum {
 	PE_MAP_SECTOR,
 };
 
-/*
-typedef struct _PEMapEntry {
-	uint16_t type;
-	uint16_t sect_num;
-	dword    rva;
-	uint32_t rva_size;
-	dword    raw;
-	uint32_t raw_size;
-
-	_PEMapEntry(
-		uint16_t map_type = PE_MAP_INVALID, 
-		uint16_t section_num = -1,
-		dword voffset = 0, 
-		uint32_t vsize = 0, 
-		dword roffset = 0, 
-		uint32_t rsize = 0
-	) : type(map_type), sect_num(section_num), rva(voffset), 
-	rva_size(vsize), raw(roffset), raw_size(rsize) { }
-
-} PEMapEntry, *pPEMapEntry;*/
-
-/*
-typedef struct _PEBlockEntry {
-	uint16_t type;
-	uint16_t sect_num;
-	dword    offset;
-	uint32_t size;
-
-	_PEBlockEntry(
-		uint16_t map_type = PE_MAP_INVALID, 
-		uint16_t section_num = -1, 
-		dword ofst = 0, 
-		uint32_t sz = 0
-	) : type(map_type), sect_num(section_num), offset(ofst), size(sz) { }
-} PEBlockEntry, *pPEBlockEntry;*/
-
 typedef struct _PEBlockEntry {
 	uint16_t type;
 	uint16_t sect_num;

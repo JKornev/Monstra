@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Monstra">
+      <UniqueIdentifier>{47135e4e-5a6d-4f16-8e57-e766dd9f3a3d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\source\PEMap.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\IOPointer.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEInfoParser.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ErrorHandler.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEHeader.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\PEMap.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\BaseDefs.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IOPointer.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEDefs.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEInfoParser.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEParser.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ErrorHandler.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEHeader.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
