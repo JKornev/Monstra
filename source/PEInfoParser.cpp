@@ -72,6 +72,8 @@ void PEBufferMapped::Clear()
 
 	_conv_blocks.clear();
 	_expected_blocks.clear();
+
+	_parsed = false;
 }
 
 bool PEBufferMapped::IsParsed() const
@@ -326,6 +328,7 @@ void PEBufferRaw::Clear()
 {
 	_header.Clear();
 	_map.Clear();
+	_parsed = false;
 }
 
 bool PEBufferRaw::IsParsed() const
