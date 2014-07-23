@@ -49,10 +49,11 @@ protected:
 class PEBufferMapped : public PEParser
 {
 public:
+	PEBufferMapped();
 	PEBufferMapped(void* buf, uint32_t size = 0);
 	~PEBufferMapped();
 
-	bool Parse();
+	bool Parse(void* buf = 0, uint32_t size = 0);
 	void Clear();
 
 	bool IsParsed() const;
@@ -70,8 +71,6 @@ public:
 	virtual bool GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size);
 
 protected:
-	bool _autosize;
-
 	PEHeaderParser _header;
 	PEMap _map;
 
@@ -96,7 +95,7 @@ public:
 	PEBufferRaw(void* buf, uint32_t size = 0);
 	~PEBufferRaw();
 
-	bool Parse();
+	bool Parse(void* buf = 0, uint32_t size = 0);
 	void Clear();
 
 	bool IsParsed() const;
@@ -114,8 +113,6 @@ public:
 	virtual bool GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size);
 
 protected:
-	bool _autosize;
-
 	PEHeaderParser _header;
 	PEMap _map;
 
@@ -127,8 +124,8 @@ struct _PEMappedRange;
 
 class PERangeMapped : public PEParser {
 public:
-	void AddRange(void* buf, dword rva, uint32_t size);
-	void RemoveRange(void* buf);
+	bool AddRange(void* buf, dword rva, uint32_t size);
+	bool RemoveRange(void* buf);
 	void Clear();
 
 public:
@@ -139,13 +136,14 @@ public:
 	virtual bool NextExpectedRawBlock(io_ptr_interface& ptr);
 	virtual bool GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size);
 
-private:
+public:
 	struct MappedRange {
-		void* buf;
+		uint8_t* buf;
 		uint32_t rva;
 		uint32_t size;
 	};
 
+private:
 	std::vector<MappedRange> _ranges;
 };
 

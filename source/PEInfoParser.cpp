@@ -1,6 +1,7 @@
 #include "PEInfoParser.h"
 #include "PEHeader.h"
 #include <exception>
+#include <algorithm>
 
 using namespace std;
 
@@ -25,6 +26,14 @@ bool PEParser::ParseHeader(PEHeaderParser &parser)
 
 // ======================= PEBufferInterface =======================
 
+PEBufferMapped::PEBufferMapped() :
+	_conv_inx(0),
+	_expected_inx(0),
+	_buf(0),
+	_buf_size(0)
+{
+}
+
 PEBufferMapped::PEBufferMapped(void* buf, uint32_t size) :
 	_conv_inx(0),
 	_expected_inx(0)
@@ -35,24 +44,31 @@ PEBufferMapped::PEBufferMapped(void* buf, uint32_t size) :
 
 	_buf = reinterpret_cast<uint8_t*>(buf);
 	_buf_size = size;
-	_autosize = (_buf_size == 0);
+
+	Parse();
 }
 
 PEBufferMapped::~PEBufferMapped()
 {
 }
 
-bool PEBufferMapped::Parse()
+bool PEBufferMapped::Parse(void* buf, uint32_t size)
 {
-	_parsed = false;
+	Clear();
 
-	if (_autosize && !PEHeaderParser::CalcHeaderSize(_buf, MONSTRA_PE_HEADER_VIRTUAL_MAX_SIZE, &_buf_size)) {
-		Clear();
+	if (buf == 0 && _buf == 0) {
+		return SetError(E_UNKNOWN, __LINE__, "parser: invalid params");
+	}
+	if (buf != 0) {
+		_buf = reinterpret_cast<uint8_t*>(buf);
+		_buf_size = size;
+	}
+
+	if (_buf_size == 0 && !PEHeaderParser::CalcHeaderSize(_buf, MONSTRA_PE_HEADER_VIRTUAL_MAX_SIZE, &_buf_size)) {
 		return SetError(E_UNKNOWN, __LINE__, "parser: can't calculate header size");
 	}
 
 	if (!_header.Parse(this)) {
-		Clear();
 		return InheritErrorFrom(_header);
 	}
 
@@ -294,24 +310,29 @@ PEBufferRaw::PEBufferRaw(void* buf, uint32_t size)
 
 	_buf = reinterpret_cast<uint8_t*>(buf);
 	_buf_size = size;
-	_autosize = (_buf_size == 0);
 }
 
 PEBufferRaw::~PEBufferRaw()
 {
 }
 
-bool PEBufferRaw::Parse()
+bool PEBufferRaw::Parse(void* buf, uint32_t size)
 {
-	_parsed = false;
+	Clear();
 
-	if (_autosize && !PEHeaderParser::CalcHeaderSize(_buf, MONSTRA_PE_HEADER_VIRTUAL_MAX_SIZE, &_buf_size)) {
-		Clear();
+	if (buf == 0 && _buf == 0) {
+		return SetError(E_UNKNOWN, __LINE__, "parser: invalid params");
+	}
+	if (buf != 0) {
+		_buf = reinterpret_cast<uint8_t*>(buf);
+		_buf_size = size;
+	}
+
+	if (_buf_size == 0 && !PEHeaderParser::CalcHeaderSize(_buf, MONSTRA_PE_HEADER_VIRTUAL_MAX_SIZE, &_buf_size)) {
 		return SetError(E_UNKNOWN, __LINE__, "parser: can't calculate header size");
 	}
 
 	if (!_header.Parse(this)) {
-		Clear();
 		return InheritErrorFrom(_header);
 	}
 
@@ -531,49 +552,104 @@ bool PEBufferRaw::GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t
 
 // ======================= PERangeMapped =======================
 
-void PERangeMapped::AddRange(void* buf, dword rva, uint32_t size)
+bool PERangeMapped::AddRange(void* buf, dword rva, uint32_t size)
 {
+	if (size == 0) {
+		return false;
+	}
 
+	MappedRange entry;
+	entry.buf = reinterpret_cast<uint8_t*>(buf);
+	entry.rva = rva;
+	entry.size = size;
+	_ranges.push_back(entry);
 }
 
-void PERangeMapped::RemoveRange(void* buf)
-{
+class remove_range_entry {
+public:
+	void* buf;
+	bool removed;
+	remove_range_entry(void* b) : buf(b) { }
+	bool operator() (const PERangeMapped::MappedRange& entry) 
+	{
+		if (entry.buf == buf) {
+			return removed = true;
+		}
+		return false; 
+	}
+};
 
+bool PERangeMapped::RemoveRange(void* buf)
+{
+	remove_range_entry pred(buf);
+	remove_if(_ranges.begin(), _ranges.end(), pred);
+	return pred.removed;
 }
 
 void PERangeMapped::Clear()
 {
-
+	_ranges.clear();
 }
 
 bool PERangeMapped::ConvRawToPtr(io_ptr_interface& ptr, dword raw, uint32_t size)
-{
+{// STUB: can't convert to raw
 	return false;
 }
 
 bool PERangeMapped::NextRawToPtr(io_ptr_interface& ptr)
-{
+{// STUB: can't convert to raw
 	return false;
 }
 
 bool PERangeMapped::ConvRvaToPtr(io_ptr_interface& ptr, dword rva, uint32_t size)
 {
-	return false;
+	vector<MappedRange>::iterator it = _ranges.begin();
+	uint32_t peak = rva + size;
+	bool found = false;
+
+	for (int i = 0, count = _ranges.size(); i < count; i++, it++) {
+		if (it->rva <= rva && it->rva + it->size >= peak) {
+			uint32_t diff = rva - it->rva;
+			ptr = PEBuffer(it->buf + diff, rva, it->size - diff);
+			found = true;
+			break;
+		}
+	}
+
+	return found;
 }
 
 bool PERangeMapped::GetExpectedRawBlock(io_ptr_interface& ptr, dword raw, uint32_t expected_size)
-{
+{// STUB: can't convert to raw
 	return false;
 }
 
 bool PERangeMapped::NextExpectedRawBlock(io_ptr_interface& ptr)
-{
+{// STUB: can't convert to raw
 	return false;
 }
 
 bool PERangeMapped::GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size)
 {
-	return false;
+	vector<MappedRange>::iterator it = _ranges.begin();
+	uint32_t size, peak = rva + expected_size;
+	bool found = false;
+
+	for (int i = 0, count = _ranges.size(); i < count; i++, it++) {
+		if (it->rva <= rva && it->rva + it->size >= rva) {
+			uint32_t diff = rva - it->rva;
+			size = it->size - diff;
+			if (size > expected_size) {
+				size = expected_size;
+			}
+
+			ptr = PEBuffer(it->buf + diff, rva, size);
+			found = true;
+			break;
+		}
+	}
+
+	return found;
 }
 
 };//Monstra

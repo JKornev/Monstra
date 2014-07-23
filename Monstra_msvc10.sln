@@ -17,6 +17,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test3_pebufferraw", "tests\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test2_pebuffermapped", "tests\test_pebuffermapped\test_pebuffermapped.vcxproj", "{4FCC72BD-90AA-4DB4-9999-ADA5CDB7D063}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CBAABE1A-0B24-4A48-8CE4-91996907E93A}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+		TODO.txt = TODO.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

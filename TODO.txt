@@ -1,0 +1,6 @@
+TODO list:
++ Implement PERangeMapped class
+- Test and add tests for PERangeMapped class (after adding some amount of PE components)
+- Fix alignment on PEMap class
+- Add custom library for tests (proj. test_pebuffermapped)
+- Add tests for PEHeaderParser, PEHeader classes
