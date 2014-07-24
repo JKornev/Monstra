@@ -24,6 +24,21 @@ bool PEParser::ParseHeader(PEHeaderParser &parser)
 	return SetErrorOK;
 }
 
+bool PEParser::ParseHeader(PEHeader &header)
+{
+	PEHeaderParser parser;
+	if (!_parsed) {
+		return SetError(E_NOT_FOUND, __LINE__, "parser: isn't parsed");
+	}
+	if (!ParseHeader(parser)) {
+		return SetErrorInherit;
+	}
+	if (!header.Load(parser)) {
+		return SetError(E_UNKNOWN, __LINE__, "parser: can't load header");
+	}
+	return SetErrorOK;
+}
+
 // ======================= PEBufferInterface =======================
 
 PEBufferMapped::PEBufferMapped() :
@@ -302,6 +317,12 @@ bool PEBufferMapped::GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint3
 
 // ======================= PEBufferRaw =======================
 
+PEBufferRaw::PEBufferRaw() :
+	_buf(0),
+	_buf_size(0)
+{
+}
+
 PEBufferRaw::PEBufferRaw(void* buf, uint32_t size)
 {
 	if (buf == 0) {
@@ -310,6 +331,8 @@ PEBufferRaw::PEBufferRaw(void* buf, uint32_t size)
 
 	_buf = reinterpret_cast<uint8_t*>(buf);
 	_buf_size = size;
+
+	Parse();
 }
 
 PEBufferRaw::~PEBufferRaw()
@@ -563,6 +586,7 @@ bool PERangeMapped::AddRange(void* buf, dword rva, uint32_t size)
 	entry.rva = rva;
 	entry.size = size;
 	_ranges.push_back(entry);
+	return true;
 }
 
 class remove_range_entry {

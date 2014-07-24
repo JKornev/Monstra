@@ -1,8 +1,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include "PEInfoParser.h"
-#include <fstream>
-#include <iostream>
+#include "../shared/tools.h"
 
 using namespace Monstra;
 
@@ -10,21 +9,17 @@ uint32_t img_size = 0x1000;
 
 BOOST_AUTO_TEST_CASE( test1_open_img )
 {
-	PEBuffer pebuf;
-	std::fstream file("../test_bin/test_ms_x86.dll", std::ios_base::in | std::ios_base::binary);
 	std::vector<char> buf;
 	PEMap map;
 
-	BOOST_CHECK ( file );
+	BOOST_CHECK ( LoadRawBin("../test_bin/test_ms_x86.dll", buf) );
 
-	file.seekg(0, std::ios_base::end);
-	buf.insert(buf.begin(), file.tellg(), 0);
-	file.seekg(0, std::ios_base::beg);
-
-	file.read(&buf[0], buf.size());
-	file.close();
-
+	//parse
 	PEBufferRaw raw(&buf[0], buf.size());
+	BOOST_CHECK( raw.IsParsed() );
+
+	PEHeaderParser& parser = raw.GetHeader();
+	BOOST_CHECK( parser.IsParsed() );
 
 	//open
 	BOOST_CHECK( raw.Parse() );
@@ -45,24 +40,15 @@ BOOST_AUTO_TEST_CASE( test1_open_img )
 
 BOOST_AUTO_TEST_CASE( test2_conv_to_ptr )
 {
-	PEBuffer pebuf;
-	std::fstream file("../test_bin/test_ms_x86.dll", std::ios_base::in | std::ios_base::binary);
 	std::vector<char> buf;
 	PEMap map;
 	PEBuffer peptr;
 
-	BOOST_CHECK( file );
+	BOOST_CHECK ( LoadRawBin("../test_bin/test_ms_x86.dll", buf) );
 
-	file.seekg(0, std::ios_base::end);
-	buf.insert(buf.begin(), file.tellg(), 0);
-	file.seekg(0, std::ios_base::beg);
-
-	file.read(&buf[0], buf.size());
-	file.close();
-
+	//parse
 	PEBufferRaw raw(&buf[0], buf.size());
-
-	BOOST_CHECK( raw.Parse() );
+	BOOST_CHECK( raw.IsParsed() );
 
 	BOOST_CHECK( raw.GetHeader().ParseMap(map) );
 	map.push_back(PEBlockEntry(PE_MAP_SECTOR, 0, 0x2000, 0x2000, 0x400, 0x600));

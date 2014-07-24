@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{27317358-298F-4EDB-87E5-B74A03318A77}</ProjectGuid>
+    <ProjectGuid>{3E6CE1DD-0AB9-4605-BA33-8C1CF093347F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>test_pebufferraw</RootNamespace>
-    <ProjectName>test3_pebufferraw</ProjectName>
+    <RootNamespace>test_pemap</RootNamespace>
+    <ProjectName>test5_peheader</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

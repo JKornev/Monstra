@@ -92,6 +92,7 @@ protected:
 class PEBufferRaw : public PEParser
 {
 public:
+	PEBufferRaw();
 	PEBufferRaw(void* buf, uint32_t size = 0);
 	~PEBufferRaw();
 
