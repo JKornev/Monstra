@@ -101,7 +101,7 @@ public:
 
 	bool IsParsed() const;
 
-	PEHeaderParser& GetHeader();
+	const PEHeaderParser& GetHeader() const;
 	bool GetMap(PEMap &pemap) const;
 	bool SetMap(PEMap &pemap);
 

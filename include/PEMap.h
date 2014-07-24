@@ -38,7 +38,7 @@ class PEMap : public std::vector<PEBlockEntry> {
 public:
 	PEMap();
 
-	bool Load(PEHeaderParser &parser, uint32_t virt_align = 0, uint32_t raw_align = 0);
+	bool Load(const PEHeaderParser &parser, uint32_t virt_align = 0, uint32_t raw_align = 0);
 	void Clear();
 
 	void Realign(uint32_t virt_align = 0, uint32_t raw_align = 0);

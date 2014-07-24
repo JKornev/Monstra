@@ -25,10 +25,11 @@ public:
 	bool IsParsed() const;
 
 	//Parser
-	bool ParseMap(PEMap& pemap);
+	bool ParseMap(PEMap& pemap) const;
 
 	// Information
 	PEArchitecture        GetArch() const;
+
 	PEImgDosHeader_ptr&   GetDos();
 	PEImgFileHeader_ptr&  GetImg();
 	PEImgOptHeader32_ptr& GetOpt32();
@@ -36,19 +37,26 @@ public:
 	PEImgDataDir_ptr&     GetDataDir();
 	PEImgNtHeaders32_ptr& GetHeader32();
 	PEImgNtHeaders64_ptr& GetHeader64();
-
 	PEImgSectionHeader_ptr& GetSectors();
-	//PEImgSectionHeader_ptr& GetSectorByPos(uint16_t pos);
 
-	bool HaveDataDir(uint32_t num);
+	const PEImgDosHeader_ptr&   GetDos() const;
+	const PEImgFileHeader_ptr&  GetImg() const;
+	const PEImgOptHeader32_ptr& GetOpt32() const;
+	const PEImgOptHeader64_ptr& GetOpt64() const;
+	const PEImgDataDir_ptr&     GetDataDir() const;
+	const PEImgNtHeaders32_ptr& GetHeader32() const;
+	const PEImgNtHeaders64_ptr& GetHeader64() const;
+	const PEImgSectionHeader_ptr& GetSectors() const;
+
+	bool HaveDataDir(uint32_t num) const;
 
 	// Sections
-	int FindFirstSectorPosByName(char* name);
-	int FindFirstSectorPosByRaw(dword roffset);
+	int FindFirstSectorPosByName(char* name) const;
+	int FindFirstSectorPosByRaw(dword roffset) const;
 
-	int FindSectorPosByVirtual(dword voffset);
-	bool FindSectorPosByName(char* name, std::vector<int>& positions);
-	bool FindSectorPosByRaw(dword roffset, std::vector<int>& positions);
+	int FindSectorPosByVirtual(dword voffset) const;
+	bool FindSectorPosByName(char* name, std::vector<int>& positions) const;
+	bool FindSectorPosByRaw(dword roffset, std::vector<int>& positions) const;
 
 	// Alignment
 	uint32_t GetVirtualAlignment() const;

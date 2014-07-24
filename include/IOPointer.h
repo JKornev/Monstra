@@ -52,6 +52,11 @@ public:
 		return reinterpret_cast<T*>(_io_ptr);
 	}
 
+	const T* ptr() const
+	{
+		return reinterpret_cast<T*>(_io_ptr);
+	}
+
 	uint32_t count() const
 	{
 		return _io_size / sizeof(T);
@@ -70,6 +75,14 @@ public:
 		return reinterpret_cast<T*>(_io_ptr);
 	}
 
+	T* operator-> () const
+	{
+		if (is_empty()) {
+			throw std::exception("io_ptr: bad ptr");
+		}
+		return reinterpret_cast<T*>(_io_ptr);
+	}
+
 	T& operator[] (uint32_t inx)
 	{
 		if (is_empty()) {
@@ -79,6 +92,17 @@ public:
 			throw std::exception("io_ptr: out of range");
 		}
 		return *reinterpret_cast<T*>(ptr() + inx);
+	}
+
+	const T& operator[] (uint32_t inx) const
+	{
+		if (is_empty()) {
+			throw std::exception("io_ptr: bad ptr");
+		}
+		if (sizeof(T) * (inx + 1) > size()) {
+			throw std::exception("io_ptr: out of range");
+		}
+		return *reinterpret_cast<const T*>(ptr() + inx);
 	}
 
 	io_ptr& operator= (const io_ptr& src)

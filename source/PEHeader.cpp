@@ -225,15 +225,15 @@ bool PEHeaderParser::IsParsed() const
 	return _is_parsed;
 }
 
-bool PEHeaderParser::ParseMap(PEMap& pemap)
+bool PEHeaderParser::ParseMap(PEMap& pemap) const
 {
 	if (!_is_parsed) {
-		return SetError(E_NOT_FOUND, __LINE__, "header: isn't parsed");
+		return false;
 	}
 	if (!pemap.Load(*this, _virt_align, _raw_align)) {
-		return SetError(E_UNKNOWN, __LINE__, "header: can't parse map");
+		return false;
 	}
-	return SetErrorOK;
+	return true;
 }
 
 PEArchitecture PEHeaderParser::GetArch() const
@@ -281,16 +281,55 @@ PEImgSectionHeader_ptr& PEHeaderParser::GetSectors()
 	return _psects;
 }
 
-bool PEHeaderParser::HaveDataDir(uint32_t num)
+const PEImgDosHeader_ptr& PEHeaderParser::GetDos() const
+{
+	return _pdos;
+}
+
+const PEImgFileHeader_ptr& PEHeaderParser::GetImg() const
+{
+	return _pimg;
+}
+
+const PEImgOptHeader32_ptr& PEHeaderParser::GetOpt32() const
+{
+	return _popt32;
+}
+
+const PEImgOptHeader64_ptr& PEHeaderParser::GetOpt64() const
+{
+	return _popt64;
+}
+
+const PEImgDataDir_ptr& PEHeaderParser::GetDataDir() const
+{
+	return _pdir;
+}
+
+const PEImgNtHeaders32_ptr& PEHeaderParser::GetHeader32() const
+{
+	return _pheader32;
+}
+
+const PEImgNtHeaders64_ptr& PEHeaderParser::GetHeader64() const
+{
+	return _pheader64;
+}
+
+const PEImgSectionHeader_ptr& PEHeaderParser::GetSectors() const
+{
+	return _psects;
+}
+
+bool PEHeaderParser::HaveDataDir(uint32_t num) const
 {
 	if (!_is_parsed || num >= MONSTRA_PE_IMG_DIR_ENTRIES) {
 		return false;
 	}
 	return (_pdir[num].VirtualAddress != 0);
-	//return 0;
 }
 
-int PEHeaderParser::FindFirstSectorPosByName(char *pname)
+int PEHeaderParser::FindFirstSectorPosByName(char *pname) const
 {
 	char buf[MONSTRA_PE_IMG_SHORT_NAME_LEN + 1] = {};
 
@@ -308,7 +347,7 @@ int PEHeaderParser::FindFirstSectorPosByName(char *pname)
 	return MONSTRA_PE_INVALID_SECTOR;
 }
 
-int PEHeaderParser::FindFirstSectorPosByRaw(dword roffset)
+int PEHeaderParser::FindFirstSectorPosByRaw(dword roffset) const
 {//TOTEST
 	if (!_is_parsed) {
 		return MONSTRA_PE_INVALID_SECTOR;
@@ -329,7 +368,7 @@ int PEHeaderParser::FindFirstSectorPosByRaw(dword roffset)
 	return MONSTRA_PE_INVALID_SECTOR;
 }
 
-int PEHeaderParser::FindSectorPosByVirtual(dword voffset)
+int PEHeaderParser::FindSectorPosByVirtual(dword voffset) const
 {//TOTEST
 	if (!_is_parsed) {
 		return MONSTRA_PE_INVALID_SECTOR;
@@ -367,7 +406,7 @@ int PEHeaderParser::FindSectorPosByVirtual(dword voffset)
 	return num;
 }
 
-bool PEHeaderParser::FindSectorPosByName(char *pname, std::vector<int> &positions)
+bool PEHeaderParser::FindSectorPosByName(char *pname, std::vector<int> &positions) const
 {
 	char buf[MONSTRA_PE_IMG_SHORT_NAME_LEN + 1] = {};
 
@@ -387,7 +426,7 @@ bool PEHeaderParser::FindSectorPosByName(char *pname, std::vector<int> &position
 	return true;
 }
 
-bool PEHeaderParser::FindSectorPosByRaw(dword roffset, std::vector<int> &positions)
+bool PEHeaderParser::FindSectorPosByRaw(dword roffset, std::vector<int> &positions) const
 {//TOTEST
 	if (!_is_parsed) {
 		return false;

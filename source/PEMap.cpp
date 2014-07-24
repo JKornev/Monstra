@@ -11,7 +11,7 @@ PEMap::PEMap() :
 {
 }
 
-bool PEMap::Load(PEHeaderParser &parser, uint32_t virt_align, uint32_t raw_align)
+bool PEMap::Load(const PEHeaderParser &parser, uint32_t virt_align, uint32_t raw_align)
 {
 	PEBlockEntry entry;
 
@@ -50,7 +50,7 @@ bool PEMap::Load(PEHeaderParser &parser, uint32_t virt_align, uint32_t raw_align
 	push_back(entry);
 
 	//map sectors
-	PEImgSectionHeader_ptr& psect = parser.GetSectors();
+	const PEImgSectionHeader_ptr& psect = parser.GetSectors();
 	for (uint16_t i = 0, count = psect.count(); i < count; i++) {
 		entry.type = PE_MAP_SECTOR;
 		entry.rva = psect[i].VirtualAddress;

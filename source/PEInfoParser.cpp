@@ -380,7 +380,7 @@ bool PEBufferRaw::IsParsed() const
 	return _parsed;
 }
 
-PEHeaderParser& PEBufferRaw::GetHeader()
+const PEHeaderParser& PEBufferRaw::GetHeader() const
 {
 	return _header;
 }

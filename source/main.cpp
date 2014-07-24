@@ -136,7 +136,7 @@ int main()
 	vector<char> buf;
 
 	file.seekg(0, ios_base::end);
-	buf.insert(buf.begin(), file.tellg(), 0);
+	buf.insert(buf.begin(), static_cast<uint32_t>(file.tellg()), 0);
 	file.seekg(0, ios_base::beg);
 
 	file.read(&buf[0], buf.size());

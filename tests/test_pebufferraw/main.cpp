@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE( test1_open_img )
 	PEBufferRaw raw(&buf[0], buf.size());
 	BOOST_CHECK( raw.IsParsed() );
 
-	PEHeaderParser& parser = raw.GetHeader();
+	const PEHeaderParser& parser = raw.GetHeader();
 	BOOST_CHECK( parser.IsParsed() );
 
 	//open

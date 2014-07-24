@@ -64,3 +64,18 @@ BOOST_AUTO_TEST_CASE( test1_loading_pe64 )
 	BOOST_CHECK_EQUAL( header.GetImgMachine(), headers.FileHeader.Machine );
 	BOOST_CHECK_EQUAL( header.GetOptEntryPoint(), headers.OptionalHeader.AddressOfEntryPoint );
 }
+
+BOOST_AUTO_TEST_CASE( test3_loading_pe32 )
+{
+	PEBufferRaw raw;
+	std::vector<char> buf;
+
+	BOOST_CHECK ( LoadRawBin("../test_bin/test_ms_x86.dll", buf) );
+
+	//parse
+	BOOST_CHECK( raw.Parse(&buf[0], buf.size()) );
+	BOOST_CHECK( raw.IsParsed() );
+
+	const PEHeaderParser parser = raw.GetHeader();
+
+}

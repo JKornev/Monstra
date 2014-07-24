@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE( test1_parsing_pe32 )
 	PEBufferRaw raw(&buf[0], buf.size());
 	BOOST_CHECK( raw.IsParsed() );
 
-	PEHeaderParser& parser = raw.GetHeader();
+	const PEHeaderParser& parser = raw.GetHeader();
 	BOOST_CHECK( parser.IsParsed() );
 
 	//check ptrs
@@ -60,18 +60,6 @@ BOOST_AUTO_TEST_CASE( test1_parsing_pe32 )
 	BOOST_CHECK( parser.FindSectorPosByRaw(0x000DCF00, positions) );
 	BOOST_CHECK_EQUAL( positions.size(), 1);
 	BOOST_CHECK_EQUAL( positions[0], 3);
-	
-	//closing
-	parser.Clear();
-	BOOST_CHECK( !parser.IsParsed() );
-
-	BOOST_CHECK( parser.GetDos().is_empty() );
-	BOOST_CHECK( parser.GetImg().is_empty() );
-	BOOST_CHECK( parser.GetOpt32().is_empty() );
-	BOOST_CHECK( parser.GetOpt64().is_empty() );
-	BOOST_CHECK( parser.GetDataDir().is_empty() );
-	BOOST_CHECK( parser.GetHeader32().is_empty() );
-	BOOST_CHECK( parser.GetHeader64().is_empty() );
 }
 
 BOOST_AUTO_TEST_CASE( test1_parsing_pe64 )
@@ -84,7 +72,7 @@ BOOST_AUTO_TEST_CASE( test1_parsing_pe64 )
 	PEBufferRaw raw(&buf[0], buf.size());
 	BOOST_CHECK( raw.IsParsed() );
 
-	PEHeaderParser& parser = raw.GetHeader();
+	const PEHeaderParser& parser = raw.GetHeader();
 	BOOST_CHECK( parser.IsParsed() );
 
 	//check ptrs
@@ -129,16 +117,4 @@ BOOST_AUTO_TEST_CASE( test1_parsing_pe64 )
 	BOOST_CHECK( parser.FindSectorPosByRaw(0x0012Fb00, positions) );
 	BOOST_CHECK_EQUAL( positions.size(), 1);
 	BOOST_CHECK_EQUAL( positions[0], 3);
-
-	//closing
-	parser.Clear();
-	BOOST_CHECK( !parser.IsParsed() );
-
-	BOOST_CHECK( parser.GetDos().is_empty() );
-	BOOST_CHECK( parser.GetImg().is_empty() );
-	BOOST_CHECK( parser.GetOpt32().is_empty() );
-	BOOST_CHECK( parser.GetOpt64().is_empty() );
-	BOOST_CHECK( parser.GetDataDir().is_empty() );
-	BOOST_CHECK( parser.GetHeader32().is_empty() );
-	BOOST_CHECK( parser.GetHeader64().is_empty() );
 }
