@@ -1,3 +1,3 @@
 #Monstra PE Engine
 
-C++ library for parsing and modify Portable Executable (PE\PE+) files
+C++ library for parsing and modify PE/PE+ (Portable Executable) files
