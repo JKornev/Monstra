@@ -1,5 +1,6 @@
 #include "PEInfoParser.h"
 #include "PEHeader.h"
+#include "PESections.h"
 #include <exception>
 #include <algorithm>
 
@@ -34,6 +35,21 @@ bool PEParser::ParseHeader(PEHeader &header)
 		return SetErrorInherit;
 	}
 	if (!header.Load(parser)) {
+		return SetError(E_UNKNOWN, __LINE__, "parser: can't load header");
+	}
+	return SetErrorOK;
+}
+
+bool PEParser::ParseSections(PESections &sections)
+{
+	PEHeaderParser parser;
+	if (!_parsed) {
+		return SetError(E_NOT_FOUND, __LINE__, "parser: isn't parsed");
+	}
+	if (!ParseHeader(parser)) {
+		return SetErrorInherit;
+	}
+	if (!sections.Load(parser)) {
 		return SetError(E_UNKNOWN, __LINE__, "parser: can't load header");
 	}
 	return SetErrorOK;

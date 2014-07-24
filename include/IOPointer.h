@@ -11,6 +11,7 @@ class io_manager;
 class io_ptr_interface {
 public:
 	io_ptr_interface(io_manager* mngr = 0, void* ptr = 0, dword offset = 0, uint32_t size = 0);
+	io_ptr_interface(const io_ptr_interface& src, dword offset, uint32_t count);
 	io_ptr_interface(const io_ptr_interface& src);
 	~io_ptr_interface();
 
@@ -27,7 +28,7 @@ protected:
 	uint32_t    _io_size;
 
 protected:
-	void _attach(io_manager* mngr/*, void* ptr, dword offset, uint32_t count*/);
+	void _attach(io_manager* mngr);
 	void _detach(bool detach_mngr);
 	void _update(void* new_ptr);
 	void _copy(const io_ptr_interface& src);
@@ -46,6 +47,7 @@ public:
 	io_ptr(io_manager* mngr, void* buf, dword offset, uint32_t count) : io_ptr_interface(mngr, buf, offset, sizeof(T) * count) { }
 	io_ptr(void* buf, dword offset, uint32_t count) : io_ptr_interface(0, buf, offset, sizeof(T) * count) { }
 	io_ptr(const io_ptr& src) : io_ptr_interface(src) { }
+	io_ptr(const io_ptr& src, dword offset, uint32_t count) : io_ptr_interface(src, offset, count * sizeof(T)) { }
 
 	T* ptr()
 	{
@@ -69,39 +71,39 @@ public:
 
 	T* operator-> ()
 	{
-		if (is_empty()) {
+		if (is_empty())
 			throw std::exception("io_ptr: bad ptr");
-		}
+		
 		return reinterpret_cast<T*>(_io_ptr);
 	}
 
 	T* operator-> () const
 	{
-		if (is_empty()) {
+		if (is_empty())
 			throw std::exception("io_ptr: bad ptr");
-		}
+		
 		return reinterpret_cast<T*>(_io_ptr);
 	}
 
 	T& operator[] (uint32_t inx)
 	{
-		if (is_empty()) {
+		if (is_empty())
 			throw std::exception("io_ptr: bad ptr");
-		}
-		if (sizeof(T) * (inx + 1) > size()) {
+		
+		if (sizeof(T) * (inx + 1) > size())
 			throw std::exception("io_ptr: out of range");
-		}
+		
 		return *reinterpret_cast<T*>(ptr() + inx);
 	}
 
 	const T& operator[] (uint32_t inx) const
 	{
-		if (is_empty()) {
+		if (is_empty())
 			throw std::exception("io_ptr: bad ptr");
-		}
-		if (sizeof(T) * (inx + 1) > size()) {
+		
+		if (sizeof(T) * (inx + 1) > size())
 			throw std::exception("io_ptr: out of range");
-		}
+		
 		return *reinterpret_cast<const T*>(ptr() + inx);
 	}
 

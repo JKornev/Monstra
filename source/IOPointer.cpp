@@ -17,6 +17,21 @@ io_ptr_interface::io_ptr_interface(io_manager* mngr, void* ptr, dword offset, ui
 		_attach(mngr);
 }
 
+io_ptr_interface::io_ptr_interface(const io_ptr_interface& src, dword offset, uint32_t size) :
+	_io_mngr(0),
+	_io_ptr(0),
+	_io_offset(0),
+	_io_size(0)
+{
+	dword src_offset = src.offset();
+	uint32_t src_size = src.size();
+
+	if (size == 0 || src_offset > offset || src_offset + src_size < offset + size)
+		return;
+
+	_copy(src);
+}
+
 io_ptr_interface::io_ptr_interface(const io_ptr_interface& src) :
 	_io_mngr(0)
 {
@@ -110,9 +125,8 @@ bool io_ptr_interface::_copy_range(io_ptr_interface& src, dword offset, uint32_t
 	dword src_offset = src.offset();
 	uint32_t src_size = src.size();
 
-	if (size == 0 || src_offset > offset || src_offset + src_size < offset + size) {
+	if (size == 0 || src_offset > offset || src_offset + src_size < offset + size)
 		return false;
-	}
 
 	_detach(true);
 
@@ -154,9 +168,8 @@ void io_manager::update(void* ptr, dword offset, uint32_t size)
 		uint32_t old_size = ptr->size();
 		uint32_t old_peak = old_offset + old_size;
 
-		if (old_offset >= offset && old_peak <= peak) {
+		if (old_offset >= offset && old_peak <= peak)
 			ptr->_update((uint8_t*)ptr + old_offset - offset);
-		}
 
 		it++;
 	}

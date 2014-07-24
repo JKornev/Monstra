@@ -427,6 +427,8 @@ typedef io_ptr<PEImgSectionHeader> PEImgSectionHeader_ptr;
 typedef io_ptr<PEImgNtHeaders32>   PEImgNtHeaders32_ptr;
 typedef io_ptr<PEImgNtHeaders64>   PEImgNtHeaders64_ptr;
 
+typedef io_ptr<PEImgBaseReloc>     PEImgBaseReloc_ptr;
+
 };/*Monstra namespace*/
 
 #endif

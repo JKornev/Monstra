@@ -7,6 +7,7 @@
 #include "IOPointer.h"
 #include "PEInfoParser.h"
 #include "PEMap.h"
+#include "PESections.h"
 
 using namespace std;
 using namespace Monstra;
@@ -204,7 +205,13 @@ int main()
 
 	PERangeMapped range;
 
+	PESections sects;
+
+	if (!raw.ParseSections(sects)) {
+		cout << "error sect parse failed" << endl;
+	}
+
 	cout << "ok" << endl;
-	//getchar();
+	getchar();
 	return 0;
 }

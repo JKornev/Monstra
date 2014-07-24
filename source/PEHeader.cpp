@@ -464,6 +464,27 @@ uint32_t PEHeaderParser::GetHeaderSize() const
 	return _header_size;
 }
 
+uint32_t PEHeaderParser::GetChecksum() const
+{
+	uint32_t crc = 0;
+
+	if (!_is_parsed) {
+		return 0;
+	}
+
+	crc = checksum32ex(_pdos.ptr(), _pdos.size(), 0);
+
+	if (_arch == PE_32) {
+		crc = checksum32ex(_pheader32.ptr(), _pheader32.size(), crc);
+	} else {
+		crc = checksum32ex(_pheader64.ptr(), _pheader64.size(), crc);
+	}
+
+	crc = checksum32ex(_psects.ptr(), _psects.size(), crc);
+
+	return crc;
+}
+
 // ======================= PEHeader =======================
 
 PEHeader::PEHeader()
@@ -792,230 +813,3 @@ void PEHeader::SetOptImageBase(UAddress addr)
 
 
 };//Monstra
-
-/*
-// ======================= PEHeader =======================
-
-PEHeader::PEHeader()
-{
-	Create(PE_32);
-}
-
-PEHeader::~PEHeader()
-{
-}
-
-bool PEHeader::Create(PEArchitecture arch)
-{
-	memset(&_dos, 0, sizeof(_dos));
-	memset(&_header32, 0, sizeof(_header32));
-	memset(&_header64, 0, sizeof(_header64));
-
-	_dos.e_magic = MONSTRA_PE_IMG_DOS_SIGNATURE;
-
-	if (arch == PE_32) {
-		_arch = arch;
-		_header32.Signature = MONSTRA_PE_IMG_NT_SIGNATURE;
-		_header32.FileHeader.Machine = MONSTRA_PE_IMG_FILE_MACHINE_I386;
-		_header32.OptionalHeader.Magic = MONSTRA_PE_IMG_NT_OPTIONAL_HDR32_MAGIC;
-		_pimg = &_header32.FileHeader;
-	} else if (arch == PE_64) {
-		_arch = arch;
-		_header64.Signature = MONSTRA_PE_IMG_NT_SIGNATURE;
-		_header64.FileHeader.Machine = MONSTRA_PE_IMG_FILE_MACHINE_AMD64;
-		_header64.OptionalHeader.Magic = MONSTRA_PE_IMG_NT_OPTIONAL_HDR64_MAGIC;
-		_pimg = &_header64.FileHeader;
-	} else {
-		return false;
-	}
-
-	return true;
-}
-
-bool PEHeader::Load(PEHeaderParser &peinfo)
-{
-	pPEImgDosHeader pdos;
-
-	if (!peinfo.IsParsed()) {
-		return false;
-	}
-
-	_arch = peinfo.GetArch();
-	pdos = peinfo.GetDos();
-
-	if (_arch == PE_32) {
-		memcpy(&_header32, peinfo.GetHeader32(), sizeof(_header32));
-		memset(&_header64, 0, sizeof(_header64));
-		_pimg = &_header32.FileHeader;
-	} else if (_arch == PE_64) {
-		memcpy(&_header64, peinfo.GetHeader64(), sizeof(_header64));
-		memset(&_header32, 0, sizeof(_header32));
-		_pimg = &_header64.FileHeader;
-	} else {
-		return false;
-	}
-
-	return true;
-}
-
-bool PEHeader::IsValid()
-{//TODO
-	return false;
-}
-
-PEArchitecture PEHeader::GetArch() const
-{
-	return _arch;
-}
-
-pPEImgDosHeader PEHeader::GetDos()
-{
-	return &_dos;
-}
-
-pPEImgFileHeader PEHeader::GetImg()
-{
-	return _pimg;
-}
-
-pPEImgNtHeaders32 PEHeader::GetHeader32()
-{
-	if (_arch != PE_32) {
-		return 0;
-	}
-	return &_header32;
-}
-
-pPEImgNtHeaders64 PEHeader::GetHeader64()
-{
-	if (_arch != PE_64) {
-		return 0;
-	}
-	return &_header64;
-}
-
-uint16_t PEHeader::GetMachine() const
-{
-	return _pimg->Machine;
-}
-
-void PEHeader::SetMachine(uint16_t machine)
-{
-	_pimg->Machine = machine;
-}
-
-uint16_t PEHeader::GetCharacteristics() const
-{
-	return _pimg->Characteristics;
-}
-
-void PEHeader::SetCharacteristics(uint16_t chcs)
-{
-	_pimg->Characteristics = chcs;
-}
-
-uint32_t PEHeader::GetVirtualAlignment() const
-{
-	uint32_t align;
-	if (_arch == PE_32) {
-		align = _header32.OptionalHeader.SectionAlignment;
-	} else {
-		align = _header64.OptionalHeader.SectionAlignment;
-	}
-	return align;
-}
-
-void PEHeader::SetVirtualAlignment(uint32_t valign)
-{
-	if (_arch == PE_32) {
-		_header32.OptionalHeader.SectionAlignment = valign;
-	} else {
-		_header64.OptionalHeader.SectionAlignment = valign;
-	}
-}
-
-uint32_t PEHeader::GetRawAlignment() const
-{
-	uint32_t align;
-	if (_arch == PE_32) {
-		align = _header32.OptionalHeader.FileAlignment;
-	} else {
-		align = _header64.OptionalHeader.FileAlignment;
-	}
-	return align;
-}
-
-void PEHeader::SetRawAlignment(uint32_t ralign)
-{
-	if (_arch == PE_32) {
-		_header32.OptionalHeader.FileAlignment = ralign;
-	} else {
-		_header64.OptionalHeader.FileAlignment = ralign;
-	}
-}
-
-uint16_t PEHeader::GetSubsystem() const
-{
-	uint32_t subsys;
-	if (_arch == PE_32) {
-		subsys = _header32.OptionalHeader.Subsystem;
-	} else {
-		subsys = _header64.OptionalHeader.Subsystem;
-	}
-	return subsys;
-}
-
-void PEHeader::SetSubsystem(uint16_t subsys)
-{
-	if (_arch == PE_32) {
-		_header32.OptionalHeader.Subsystem = subsys;
-	} else {
-		_header64.OptionalHeader.Subsystem = subsys;
-	}
-}
-
-uint32_t PEHeader::GetEntryPoint() const
-{
-	uint32_t ep;
-	if (_arch == PE_32) {
-		ep = _header32.OptionalHeader.AddressOfEntryPoint;
-	} else {
-		ep = _header64.OptionalHeader.AddressOfEntryPoint;
-	}
-	return ep;
-}
-
-void PEHeader::SetEntryPoint(uint32_t ep)
-{
-	if (_arch == PE_32) {
-		_header32.OptionalHeader.AddressOfEntryPoint = ep;
-	} else {
-		_header64.OptionalHeader.AddressOfEntryPoint = ep;
-	}
-}
-
-UAddress PEHeader::GetImageBase() const
-{
-	UAddress addr = 0ull;
-	if (_arch == PE_32) {
-		addr = _header32.OptionalHeader.ImageBase;
-	} else {
-		addr = _header64.OptionalHeader.ImageBase;
-	}
-	return addr;
-}
-
-void PEHeader::SetImageBase(UAddress addr)
-{
-	if (_arch == PE_32) {
-		_header32.OptionalHeader.ImageBase = addr;
-	} else {
-		_header64.OptionalHeader.ImageBase = addr;
-	}
-}
-
-// ======================= PEHeaderBuilder =======================
-
-
-
-};/ *Monstra namespace* /*/

@@ -27,7 +27,7 @@ public:
 	bool ParseHeader(PEHeaderParser &parser);
 	bool ParseHeader(PEHeader &header);
 
-	bool ParseSections(PESectionsParser &parser);
+	//bool ParseSections(PESectionsParser &parser);
 	bool ParseSections(PESections &sections);
 
 	bool ParseExports(PEExportsParser &parser);

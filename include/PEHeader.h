@@ -65,6 +65,9 @@ public:
 	// Size
 	uint32_t GetHeaderSize() const;
 
+	// Misc
+	uint32_t GetChecksum() const;
+
 public:
 	static bool CalcHeaderSize(void* buf, uint32_t size, uint32_t* pheader_size);
 

@@ -25,6 +25,12 @@
       <Filter>Monstra\PE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\PESections.cpp">
+      <Filter>Monstra\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PEDirRelocs.cpp">
+      <Filter>Monstra\PE</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\BaseDefs.h">
@@ -49,6 +55,12 @@
       <Filter>Monstra\PE</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\PEMap.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PESections.h">
+      <Filter>Monstra\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PEDirRelocs.h">
       <Filter>Monstra\PE</Filter>
     </ClInclude>
   </ItemGroup>

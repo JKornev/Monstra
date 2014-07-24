@@ -14,19 +14,23 @@
     <ClCompile Include="..\..\source\ErrorHandler.cpp" />
     <ClCompile Include="..\..\source\IOPointer.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\PEDirRelocs.cpp" />
     <ClCompile Include="..\..\source\PEHeader.cpp" />
     <ClCompile Include="..\..\source\PEInfoParser.cpp" />
     <ClCompile Include="..\..\source\PEMap.cpp" />
+    <ClCompile Include="..\..\source\PESections.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\BaseDefs.h" />
     <ClInclude Include="..\..\include\ErrorHandler.h" />
     <ClInclude Include="..\..\include\IOPointer.h" />
     <ClInclude Include="..\..\include\PEDefs.h" />
+    <ClInclude Include="..\..\include\PEDirRelocs.h" />
     <ClInclude Include="..\..\include\PEHeader.h" />
     <ClInclude Include="..\..\include\PEInfoParser.h" />
     <ClInclude Include="..\..\include\PEMap.h" />
     <ClInclude Include="..\..\include\PEParser.h" />
+    <ClInclude Include="..\..\include\PESections.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A9DB1E26-81F0-4F5E-A7E9-0C7337D6B1E7}</ProjectGuid>
