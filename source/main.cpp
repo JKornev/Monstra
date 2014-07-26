@@ -8,6 +8,7 @@
 #include "PEInfoParser.h"
 #include "PEMap.h"
 #include "PESections.h"
+#include "PEDirRelocs.h"
 
 using namespace std;
 using namespace Monstra;
@@ -209,6 +210,14 @@ int main()
 
 	if (!raw.ParseSections(sects)) {
 		cout << "error sect parse failed" << endl;
+	}
+
+	PERelocs rels;
+
+	for (int i = 0; i < 100; i++) {
+		if (!raw.ParseRelocs(rels)) {
+			cout << "error rels parse failed" << endl;
+		}
 	}
 
 	cout << "ok" << endl;

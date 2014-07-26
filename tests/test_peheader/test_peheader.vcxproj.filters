@@ -26,6 +26,12 @@
     <ClCompile Include="..\..\source\PEHeader.cpp">
       <Filter>Monstra</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\PEDirRelocs.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PESections.cpp">
+      <Filter>Monstra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\PEMap.h">
@@ -53,5 +59,11 @@
       <Filter>Monstra</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\tools.h" />
+    <ClInclude Include="..\..\include\PEDirRelocs.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\PESections.h">
+      <Filter>Monstra</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

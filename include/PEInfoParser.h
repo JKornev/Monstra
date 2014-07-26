@@ -44,6 +44,7 @@ public:
 
 protected:
 	bool _parsed;
+	PEHeaderParser _header;
 };
 
 class PEBufferMapped : public PEParser
@@ -71,7 +72,7 @@ public:
 	virtual bool GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size);
 
 protected:
-	PEHeaderParser _header;
+	//PEHeaderParser _header;
 	PEMap _map;
 
 	uint8_t* _buf;
@@ -114,7 +115,7 @@ public:
 	virtual bool GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size);
 
 protected:
-	PEHeaderParser _header;
+	//PEHeaderParser _header;
 	PEMap _map;
 
 	uint8_t* _buf;
@@ -123,7 +124,7 @@ protected:
 
 struct _PEMappedRange;
 
-class PERangeMapped : public PEParser {
+class PERangeMapped : public PESourceInterface, public MONSTRA_ERROR_CTRL {
 public:
 	bool AddRange(void* buf, dword rva, uint32_t size);
 	bool RemoveRange(void* buf);
@@ -145,7 +146,7 @@ public:
 	};
 
 private:
-	std::vector<MappedRange> _ranges;
+	std::list<MappedRange> _ranges;
 };
 
 };//Monstra

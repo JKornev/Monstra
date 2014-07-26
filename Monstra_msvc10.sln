@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monstra", "Monstra", "{3E6C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PEEngineLib", "build\pe-engine-lib-msvc-10\pelib.vcxproj", "{218814F6-3394-4A91-B77B-EF8A4AD859D7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test1_pemap", "tests\test_pemap\test_pemap.vcxproj", "{E2A1D947-BE2A-489B-A042-DF2F38DE48C4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test010_pemap", "tests\test_pemap\test_pemap.vcxproj", "{E2A1D947-BE2A-489B-A042-DF2F38DE48C4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test3_pebufferraw", "tests\test_pebufferraw\test_pebufferraw.vcxproj", "{27317358-298F-4EDB-87E5-B74A03318A77}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test012_pebufferraw", "tests\test_pebufferraw\test_pebufferraw.vcxproj", "{27317358-298F-4EDB-87E5-B74A03318A77}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test2_pebuffermapped", "tests\test_pebuffermapped\test_pebuffermapped.vcxproj", "{4FCC72BD-90AA-4DB4-9999-ADA5CDB7D063}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test011_pebuffermapped", "tests\test_pebuffermapped\test_pebuffermapped.vcxproj", "{4FCC72BD-90AA-4DB4-9999-ADA5CDB7D063}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CBAABE1A-0B24-4A48-8CE4-91996907E93A}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,9 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CBAABE1A-0
 		docs\TODO.txt = docs\TODO.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test5_peheader", "tests\test_peheader\test_peheader.vcxproj", "{3E6CE1DD-0AB9-4605-BA33-8C1CF093347F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test020_peheader", "tests\test_peheader\test_peheader.vcxproj", "{3E6CE1DD-0AB9-4605-BA33-8C1CF093347F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test4_peheaderparser", "tests\test_peheaderparser\test_peheaderparser.vcxproj", "{AB63CBC5-72A3-4016-A910-3E6A9CF72F69}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test021_peheaderparser", "tests\test_peheaderparser\test_peheaderparser.vcxproj", "{AB63CBC5-72A3-4016-A910-3E6A9CF72F69}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test013_perangemapped", "tests\test_perangemapped\test_perangemapped.vcxproj", "{DAAC20B5-8E58-44D4-AABD-FB3081735E66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{AB63CBC5-72A3-4016-A910-3E6A9CF72F69}.Debug|Win32.Build.0 = Debug|Win32
 		{AB63CBC5-72A3-4016-A910-3E6A9CF72F69}.Release|Win32.ActiveCfg = Release|Win32
 		{AB63CBC5-72A3-4016-A910-3E6A9CF72F69}.Release|Win32.Build.0 = Release|Win32
+		{DAAC20B5-8E58-44D4-AABD-FB3081735E66}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DAAC20B5-8E58-44D4-AABD-FB3081735E66}.Debug|Win32.Build.0 = Debug|Win32
+		{DAAC20B5-8E58-44D4-AABD-FB3081735E66}.Release|Win32.ActiveCfg = Release|Win32
+		{DAAC20B5-8E58-44D4-AABD-FB3081735E66}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +79,6 @@ Global
 		{4FCC72BD-90AA-4DB4-9999-ADA5CDB7D063} = {0B375EE7-B989-4AC2-8E85-B3A237BD5F64}
 		{3E6CE1DD-0AB9-4605-BA33-8C1CF093347F} = {0B375EE7-B989-4AC2-8E85-B3A237BD5F64}
 		{AB63CBC5-72A3-4016-A910-3E6A9CF72F69} = {0B375EE7-B989-4AC2-8E85-B3A237BD5F64}
+		{DAAC20B5-8E58-44D4-AABD-FB3081735E66} = {0B375EE7-B989-4AC2-8E85-B3A237BD5F64}
 	EndGlobalSection
 EndGlobal

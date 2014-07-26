@@ -14,7 +14,7 @@
     <ProjectGuid>{3E6CE1DD-0AB9-4605-BA33-8C1CF093347F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_pemap</RootNamespace>
-    <ProjectName>test5_peheader</ProjectName>
+    <ProjectName>test020_peheader</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,9 +84,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\ErrorHandler.cpp" />
     <ClCompile Include="..\..\source\IOPointer.cpp" />
+    <ClCompile Include="..\..\source\PEDirRelocs.cpp" />
     <ClCompile Include="..\..\source\PEHeader.cpp" />
     <ClCompile Include="..\..\source\PEInfoParser.cpp" />
     <ClCompile Include="..\..\source\PEMap.cpp" />
+    <ClCompile Include="..\..\source\PESections.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -94,10 +96,12 @@
     <ClInclude Include="..\..\include\ErrorHandler.h" />
     <ClInclude Include="..\..\include\IOPointer.h" />
     <ClInclude Include="..\..\include\PEDefs.h" />
+    <ClInclude Include="..\..\include\PEDirRelocs.h" />
     <ClInclude Include="..\..\include\PEHeader.h" />
     <ClInclude Include="..\..\include\PEInfoParser.h" />
     <ClInclude Include="..\..\include\PEMap.h" />
     <ClInclude Include="..\..\include\PEParser.h" />
+    <ClInclude Include="..\..\include\PESections.h" />
     <ClInclude Include="..\shared\tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

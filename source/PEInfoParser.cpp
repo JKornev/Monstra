@@ -1,6 +1,7 @@
 #include "PEInfoParser.h"
 #include "PEHeader.h"
 #include "PESections.h"
+#include "PEDirRelocs.h"
 #include <exception>
 #include <algorithm>
 
@@ -54,6 +55,38 @@ bool PEParser::ParseSections(PESections &sections)
 	}
 	return SetErrorOK;
 }
+
+bool PEParser::ParseRelocs(PERelocsParser& parser)
+{
+	if (!_parsed) {
+		return SetError(E_NOT_FOUND, __LINE__, "parser: isn't parsed");
+	}
+	if (!_header.HaveDataDir(MONSTRA_PE_IMG_DIR_ENTRY_BASERELOC)) {
+		return SetError(E_NOT_FOUND, __LINE__, "parser: relocs dir not found");
+	}
+	if (!parser.Parse(this, _header.GetDataDir()[MONSTRA_PE_IMG_DIR_ENTRY_BASERELOC].VirtualAddress,
+		_header.GetDataDir()[MONSTRA_PE_IMG_DIR_ENTRY_BASERELOC].Size, 
+		_header.GetArch() == PE_32 ? _header.GetOpt32()->ImageBase : _header.GetOpt64()->ImageBase)) {
+		return InheritErrorFrom(parser);
+	}
+	return SetErrorOK;
+}
+
+bool PEParser::ParseRelocs(PERelocs &relocs)
+{
+	PERelocsParser parser;
+	if (!_parsed) {
+		return SetError(E_NOT_FOUND, __LINE__, "parser: isn't parsed");
+	}
+	if (!ParseRelocs(parser)) {
+		return SetErrorInherit;
+	}
+	if (!relocs.Load(parser)) {
+		return SetError(E_UNKNOWN, __LINE__, "parser: can't load relocs");
+	}
+	return SetErrorOK;
+}
+
 
 // ======================= PEBufferInterface =======================
 
@@ -605,6 +638,7 @@ bool PERangeMapped::AddRange(void* buf, dword rva, uint32_t size)
 	return true;
 }
 
+/*
 class remove_range_entry {
 public:
 	void* buf;
@@ -617,13 +651,18 @@ public:
 		}
 		return false; 
 	}
-};
+};*/
 
 bool PERangeMapped::RemoveRange(void* buf)
 {
-	remove_range_entry pred(buf);
-	remove_if(_ranges.begin(), _ranges.end(), pred);
-	return pred.removed;
+	list<MappedRange>::iterator it = _ranges.begin();
+	for (int i = 0, count = _ranges.size(); i < count; i++, it++) {
+		if (it->buf == buf) {
+			_ranges.erase(it);
+			return true;
+		}
+	}
+	return false;
 }
 
 void PERangeMapped::Clear()
@@ -643,7 +682,7 @@ bool PERangeMapped::NextRawToPtr(io_ptr_interface& ptr)
 
 bool PERangeMapped::ConvRvaToPtr(io_ptr_interface& ptr, dword rva, uint32_t size)
 {
-	vector<MappedRange>::iterator it = _ranges.begin();
+	list<MappedRange>::iterator it = _ranges.begin();
 	uint32_t peak = rva + size;
 	bool found = false;
 
@@ -671,7 +710,7 @@ bool PERangeMapped::NextExpectedRawBlock(io_ptr_interface& ptr)
 
 bool PERangeMapped::GetExpectedRvaBlock(io_ptr_interface& ptr, dword rva, uint32_t expected_size)
 {
-	vector<MappedRange>::iterator it = _ranges.begin();
+	list<MappedRange>::iterator it = _ranges.begin();
 	uint32_t size, peak = rva + expected_size;
 	bool found = false;
 

@@ -9,18 +9,20 @@
 
 #include <list>
 #include <vector>
+#include <exception>
 
 namespace Monstra {
 
 // Parser
 
 typedef std::vector<PEImgBaseReloc_ptr> RelocsEntryInfoList;
-typedef bool (MONSTRA_CDECL *enum_relocs_callback)(const PEBuffer block, word type, dword rva, void* params);
+typedef bool (MONSTRA_CDECL *enum_relocs_callback)(const PEBuffer block, uint32_t block_inx, 
+	uint32_t block_base, word type, dword rva, void* params);
 
-class PEDirRelocsParser : public MONSTRA_ERROR_CTRL {
+class PERelocsParser : public MONSTRA_ERROR_CTRL {
 public:
-	PEDirRelocsParser();
-	~PEDirRelocsParser();
+	PERelocsParser();
+	~PERelocsParser();
 
 	bool Parse(PESourceInterface* src, dword dir_rva, uint32_t dir_size, UAddress imgbase);
 	void Clear();
@@ -37,7 +39,7 @@ public:
 	bool EnumRelocs(enum_relocs_callback callback, void *params) const;
 
 	// misc
-	bool ChangeImagebase(UAddress new_base);
+	bool ChangeImagebase(PESourceInterface* src, UAddress new_base);
 	uint32_t GetChecksum() const;
 
 private:
@@ -52,8 +54,48 @@ private:
 
 // Container
 
-class PEDirRelocs {
+typedef struct _RelocsTableEntry {
+	uint16_t type;
+	uint16_t offset;
+	_RelocsTableEntry(uint16_t t, uint16_t o) : type(t), offset(o) { }
+} RelocsTableEntry, *pRelocsTableEntry;
+
+typedef struct _RelocsTable {
+	dword rva;
+	std::vector<RelocsTableEntry> entry;
+
+	_RelocsTable(dword voffset) : rva(voffset) { }
+
+	dword get_rel(uint16_t inx, uint16_t* type = 0) 
+	{
+		if (inx > entry.size())
+			throw std::exception("relocs: out of range");
+		if (type != 0)
+			*type = entry[inx].type;
+		return rva + entry[inx].offset;
+	}
+} RelocsTable, *pRelocsTable;
+
+class PERelocs : public std::vector<RelocsTable> {
 public:
+	
+	PERelocs();
+	~PERelocs();
+
+	bool Load(PERelocsParser &parser);
+	void Clear();
+
+	UAddress GetImagebase() const;
+	void SetImagebase(UAddress imgbase);
+
+	void Commit(void* buf, uint32_t size, UAddress new_base) const;
+
+private:
+	UAddress _imgbase;
+
+private:
+	static bool MONSTRA_CDECL enum_callback(const PEBuffer block, uint32_t block_inx, 
+		uint32_t block_base, word type, dword rva, void* params);
 
 };
 

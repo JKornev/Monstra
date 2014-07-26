@@ -130,7 +130,8 @@ bool io_ptr_interface::_copy_range(io_ptr_interface& src, dword offset, uint32_t
 
 	_detach(true);
 
-	_io_ptr = reinterpret_cast<uint8_t*>(src.ptr()) + offset;
+	uint32_t diff = offset - src_offset;
+	_io_ptr = reinterpret_cast<uint8_t*>(src.ptr()) + diff;
 	_io_offset = offset;
 	_io_size = size;
 
